@@ -1,0 +1,254 @@
+openapi: "3.0.0"
+info:
+  description: "Blockchain API of Plism TASK-634"
+  version: "0.0.1"
+  title: "Blockchain API"
+  #termsOfService: "http://swagger.io/terms/"
+  #contact:
+  #  email: "apiteam@swagger.io"
+  #license:
+  #  name: "Apache 2.0"
+  #  url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+paths:
+  /accounts:
+    get:
+      summary: "アカウント取得"
+      description: "登録されているアカウントを取得します。"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: "string"
+                          example: "abcde"
+                        secret_key:
+                          type: "string"
+                          example: "abcde"
+                        blockchain_address:
+                          type: "string"
+                          example: "abcde"
+    post:
+      summary: "アカウント登録"
+      description: "アカウントを登録します。"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                user_id:
+                  type: "string"
+                  description: "ユーザーID"
+                password:
+                  type: "string"
+                  description: "パスワード"
+              required:
+                - user_id
+                - password
+            example:
+              user_id: "kimihiko.isobe.vg@fujifilm.com"
+              password: "Rencho2000"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+                  token:
+                    type: "string"
+                    example: "abcde"
+  /accounts/token:
+    get:
+      summary: "認証トークン再取得"
+      description: "登録されているアカウントの認証トークンを再取得します。"
+      parameters:
+      - name: "user_id"
+        in: "path"
+        description: "ユーザーID"
+        required: true
+        schema:
+            type : "string"
+      - name: "password"
+        in: "path"
+        description: "パスワード"
+        required: true
+        schema:
+            type : "string"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+                  token:
+                    type: "string"
+                    example: "abcde"
+  /amounts:
+    get:
+      summary: "保有ポイント取得"
+      description: "保有しているポイントを取得します。"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+                  amount:
+                    type: "integer"
+                    format: "int32"
+                    example: 100
+  /transaction:
+    post:
+      summary: "トランザクション"
+      description: "ポイントを送信します。"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                type:
+                  type: "integer"
+                  format: "int32"
+                  description: "1:ポイント、2:NFT"
+                recipient_blockchain_address:
+                  type: "string"
+                  description: "送信先ブロックチェーンアドレス"
+                value:
+                  type: "integer"
+                  format: "int32"
+                  description: "ポイント (※type=1のときはポイント、type=2のときは譲渡ポイント)"
+                id:
+                  type: "string"
+                  description: "資産ID (※type=2のとき必須、type=1のとき不要)"
+              required:
+                - type
+                - recipient_blockchain_address
+                - value
+                - id
+            example:
+              type: 1
+              recipient_blockchain_address: "abcde"
+              value: 1
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+  /nft:
+    post:
+      summary: "NFT登録"
+      description: "NFTを登録します。"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                  description: "資産ID"
+                url:
+                  type: "string"
+                  description: "資産URL"
+                contract:
+                  type: string
+                  format: binary
+                  description: "コントラクト (Pythonファイル)"
+              required:
+                - id
+                - url
+            example:
+              id: "hoge"
+              url: "https://hoge.com/hoge.svg"
+              contract: "contract.py"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+    get:
+      summary: "NFT取得"
+      description: "保有しているNFTを取得します。"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "資産ID (※指定しないもしくはnullの場合は全て)"
+        required: true
+        schema:
+            type : "string"
+      responses:
+        200:
+          description: "成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  result:
+                    type: "integer"
+                    format: "int32"
+                    example: 0
+                  nfts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: "string"
+                          example: "hoge"
+                        url:
+                          type: "string"
+                          example: "https://hoge.com/hoge.svg"
+                        datetime:
+                          type: "string"
+                          format: "date-time"
+                          example: "2021-06-01T00:00:00.000000+00:00"
