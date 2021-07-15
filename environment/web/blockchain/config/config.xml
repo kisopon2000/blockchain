@@ -1,0 +1,23 @@
+<config>
+  <log>
+    <maxfilecycle>3</maxfilecycle>
+    <maxfilesize>1048576</maxfilesize>
+    <level>INF</level>
+  </log>
+  <db>
+    <driver>{SQL Server}</driver>
+    <server>localhost\PWSP</server>
+    <dbname>exchange</dbname>
+    <uid>Rtc_Admin</uid>
+    <pwd>P@ssW0rd</pwd>
+    <leveldb>
+      <dir>/opt/rtc/system/db/leveldb</dir>
+    </leveldb>
+  </db>
+  <host>
+    <base_ip>127.0.0.1</base_ip>
+    <ip_num>2</ip_num>
+    <base_port>5000</base_port>
+    <port_num>2</port_num>
+  </host>
+</config>

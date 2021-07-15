@@ -1,0 +1,249 @@
+<!-- DB POST Evaluation sample -->
+<!-- You deploy this file to 'opt/PWSP/web/contents' and access 'http://localhost/' by browser  -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		h1 {color: red; margin: 0 100px;}
+		p {color: blue;}
+		div {margin: 0 50px ;}
+		input{ margin: 10px 10px ;}
+		input[type=button]{background:linear-gradient(#c0f0f0, #a0c0c0);}
+		input[type=button]:hover{background:linear-gradient(#f0f0c0, #c0c0a0);}
+	</style>
+	<meta name="Fxrscui01" content="DB POST sample" charset="utf-8">
+	<meta name="author" content="FUJI XEROX">
+	<meta name="description" content="Dummy Input IOT_ID">
+	<meta name="keywords" content="Dummy">
+	<script>
+	var g_token = '06cdf9adf955f997f9a4f9a3f9a7f999f9a7f9b3f99af9a5f9a1f960f979f960f963f988f985f966f971f966f969f9bdf9bcf9aff9bdf9abf9bcf9b7f9b3f972f98bf972f984f9d1';
+	function syncpost(type, act, param, content){
+		var xhr = new XMLHttpRequest();
+		xhr.open(type, act, false);
+		xhr.setRequestHeader("Content-Type", content);
+		xhr.setRequestHeader("X-PWSP-AUTH", g_token);
+		xhr.send(param);
+		if(xhr.status === 200){
+			alert(xhr.responseText);
+		} else {
+			alert(xhr.status);
+		}
+	}
+	function syncpostForUpload(type, act, param){
+		var xhr = new XMLHttpRequest();
+		xhr.open(type, act, false);
+		xhr.setRequestHeader("X-PWSP-AUTH", g_token);
+		xhr.send(param);
+		if(xhr.status === 200){
+			alert(xhr.responseText);
+		} else {
+			alert(xhr.status);
+		}
+	}
+	function getAccount(){
+		var act='accounts';
+		var param = "";
+		act += "?" + param;
+		ret = syncpost("GET", act, param, "application/x-www-form-urlencoded");
+		return false;
+	}
+	function postAccount(){
+		var act='accounts';
+		var param = {};
+		param.user_id = document.forms.form1.postAccount_user_id.value;
+		param.password = document.forms.form1.postAccount_password.value;
+		if(!param.user_id){
+		    alert("ユーザーIDを入力して下さい")
+		    return false;
+		}
+		if(!param.password){
+		    alert("パスワードを入力して下さい")
+		    return false;
+		}
+		ret = syncpost("POST", act, JSON.stringify(param), "application/json");
+		return false;
+	}
+	function getAccountToken(){
+		var act='accounts/token';
+		if(!document.forms.form1.getAccountToken_user_id.value){
+		    alert("ユーザーIDを入力して下さい")
+		    return false;
+		}
+		if(!document.forms.form1.getAccountToken_password.value){
+		    alert("パスワードを入力して下さい")
+		    return false;
+		}
+		var param = "";
+		param = encodeURIComponent("user_id") + "=" + encodeURIComponent(document.forms.form1.getAccountToken_user_id.value);
+		param += "&";
+		param += encodeURIComponent("password") + "=" + encodeURIComponent(document.forms.form1.getAccountToken_password.value);
+		act += "?" + param;
+		ret = syncpost("GET", act, param, "application/x-www-form-urlencoded");
+		return false;
+	}
+	function getAmount(){
+		var act='amounts';
+		var param = "";
+		act += "?" + param;
+		ret = syncpost("GET", act, param, "application/x-www-form-urlencoded");
+		return false;
+	}
+	function postTransaction(){
+		var act='transactions';
+		var param = {};
+		param.type = 1;
+		param.recipient_blockchain_address = document.forms.form1.postTransaction_recipient_blockchain_address.value;
+		param.value = document.forms.form1.postTransaction_value.value;
+		if(!param.recipient_blockchain_address){
+		    alert("送信先ブロックチェーンアドレスを入力して下さい")
+		    return false;
+		}
+		if(!param.value){
+		    alert("valueを入力して下さい")
+		    return false;
+		}
+		ret = syncpost("POST", act, JSON.stringify(param), "application/json");
+		return false;
+	}
+	function postApiTransaction(){
+		var act='/api/transactions';
+		var param = {};
+		param.type = 1;
+		param.key = document.forms.form1.postApiTransaction_key.value;
+		param.secret_key = document.forms.form1.postApiTransaction_secret_key.value;
+		param.sender_blockchain_address = document.forms.form1.postApiTransaction_sender_blockchain_address.value;
+		param.recipient_blockchain_address = document.forms.form1.postApiTransaction_recipient_blockchain_address.value;
+		param.value = document.forms.form1.postApiTransaction_value.value;
+		if(!param.key){
+		    alert("keyを入力して下さい")
+		    return false;
+		}
+		if(!param.secret_key){
+		    alert("secret keyを入力して下さい")
+		    return false;
+		}
+		if(!param.sender_blockchain_address){
+		    alert("送信元ブロックチェーンアドレスを入力して下さい")
+		    return false;
+		}
+		if(!param.recipient_blockchain_address){
+		    alert("送信先ブロックチェーンアドレスを入力して下さい")
+		    return false;
+		}
+		if(!param.value){
+		    alert("valueを入力して下さい")
+		    return false;
+		}
+		ret = syncpost("POST", act, JSON.stringify(param), "application/json");
+		return false;
+	}
+
+	function postNft(){
+		var act='nfts';
+		var param = new FormData();
+		var file = document.getElementById('postNft_contract').files[0];
+		if(!document.forms.form1.postNft_id.value){
+		    alert("資産IDを入力して下さい")
+		    return false;
+		}
+		if(!document.forms.form1.postNft_url.value){
+		    alert("資産保管場所を入力して下さい")
+		    return false;
+		}
+		param.append("id", document.forms.form1.postNft_id.value);
+		param.append("url", document.forms.form1.postNft_url.value);		
+		if(file){
+			param.append("contract", file);
+		}
+		ret = syncpostForUpload("POST", act, param);
+		return false;
+	}
+	function getNft(){
+		var act='nfts';
+		var param = "";
+		param = encodeURIComponent("id") + "=" + encodeURIComponent(document.forms.form1.getNft_id.value);
+		act += "?" + param;
+		ret = syncpost("GET", act, param, "application/x-www-form-urlencoded");
+		return false;
+	}
+	function postNftTransaction(){
+		var act='/transactions';
+		var param = {};
+		param.type = 2;
+		param.recipient_blockchain_address = document.forms.form1.postNftTransaction_recipient_blockchain_address.value;
+		param.id = document.forms.form1.postNftTransaction_id.value;
+		param.value = document.forms.form1.postNftTransaction_value.value;
+		if(!param.recipient_blockchain_address){
+		    alert("送信先ブロックチェーンアドレスを入力して下さい")
+		    return false;
+		}
+		if(!param.id){
+		    alert("資産IDを入力して下さい")
+		    return false;
+		}
+		if(!param.value){
+		    alert("譲渡ポイントを入力して下さい")
+		    return false;
+		}
+		ret = syncpost("POST", act, JSON.stringify(param), "application/json");
+		return false;
+	}
+	</script>
+</head>
+<body>
+	<h1>UT Tool for RTC</h1>
+	<hr>
+	<div>
+	<form method="post" id="form1">
+		<p>アカウント取得： GET /accounts</p>
+		<input type="button" value="実行" onclick="getAccount()"><br>
+		<hr>
+		<p>アカウント登録： POST /accounts</p>
+		ユーザーID:<input type="text" name="user_id" id="postAccount_user_id" value="sample@mail.com" required>
+		パスワード:<input type="password" name="password" id="postAccount_password" required>
+		<input type="button" value="実行" onclick="postAccount()"><br>
+		<hr>
+		<p>トークン再取得： GET /accounts/token</p>
+		ユーザーID:<input type="text" name="user_id" id="getAccountToken_user_id" value="sample@mail.com" required>
+		パスワード:<input type="password" name="password" id="getAccountToken_password" required>
+		<input type="button" value="実行" onclick="getAccountToken()"><br>
+		<hr>
+		<p>保有ポイント取得： GET /amounts</p>
+		<input type="button" value="実行" onclick="getAmount()"><br>
+		<hr>
+		<p>トランザクション： POST /transactions</p>
+		送信先ブロックチェーンアドレス:<input type="text" name="recipient_blockchain_address" id="postTransaction_recipient_blockchain_address" required><br>
+		value:<input type="text" name="value" id="postTransaction_value" required><br>
+		<input type="button" value="実行" onclick="postTransaction()"><br>
+		<hr>
+		<p>保有ポイント取得 (API)： GET /api/amounts</p>
+		<input type="button" value="実行" onclick="getApiAmount()"><br>
+		<hr>
+		<p>トランザクション (API)： POST /api/transactions</p>
+		key:<input type="text" name="key" id="postApiTransaction_key" required><br>
+		secret key:<input type="text" name="secret_key" id="postApiTransaction_secret_key" required><br>
+		送信元ブロックチェーンアドレス:<input type="text" name="sender_blockchain_address" id="postApiTransaction_sender_blockchain_address" required><br>
+		送信先ブロックチェーンアドレス:<input type="text" name="recipient_blockchain_address" id="postApiTransaction_recipient_blockchain_address" required><br>
+		value:<input type="text" name="value" id="postApiTransaction_value" required><br>
+		<input type="button" value="実行" onclick="postApiTransaction()"><br>
+		<hr>
+		
+		<p>NFT登録： POST /nfts</p>
+		資産ID:<input type="text" name="name" id="postNft_id" required><br>
+		資産保管場所 (URL):<input type="text" name="url" id="postNft_url" required><br>
+		コントラクト：<input type="file" accept=".py" name="contract" id="postNft_contract" required><br>
+		<input type="button" value="実行" onclick="postNft()"><br>
+		<p>保有NFT取得： GET /nfts</p>
+		資産ID:<input type="text" name="name" id="getNft_id"><br>
+		<input type="button" value="実行" onclick="getNft()"><br>
+		<p>NFTトランザクション： POST /nfts/transactions</p>
+		送信先ブロックチェーンアドレス:<input type="text" name="recipient_blockchain_address" id="postNftTransaction_recipient_blockchain_address" required><br>
+		資産ID:<input type="text" name="name" id="postNftTransaction_id" required><br>
+		譲渡ポイント:<input type="text" name="value" id="postNftTransaction_value" required><br>
+		<input type="button" value="実行" onclick="postNftTransaction()"><br>
+		<hr>
+	</form>
+	</div>
+</body>
+</html>
