@@ -1,0 +1,7 @@
+version: "3.8"                #【任意値】composeファイルの書式のバージョン(https://matsuand.github.io/docs.docker.jp.onthefly/compose/compose-file/)
+services:                     #【固定値】この中に複数のサービスを定義
+  rtc_compose_test:           #【任意値】サービス名(本ファイルのみの名前)
+    image: rtc_compose        #【任意値】イメージ名("docker images"のREPOSITORY名となる)
+    build:                    #【固定値】この中にビルド内容を定義
+      context: .              #【任意値】ビルド実行時のディレクトリ
+      dockerfile: Dockerfile  #【任意値】Dockerfileの場所(contextからの相対パス)
