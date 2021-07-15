@@ -1,0 +1,1 @@
+..\tools\Setup-Container.ps1の引数(-ArchiveFile)で指定したファイル「system.zip」を配置。
